@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import index from "../(tabs)/index";
+import index from "../index";
 
 const Stack = createNativeStackNavigator();
 
