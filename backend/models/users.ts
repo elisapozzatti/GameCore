@@ -1,29 +1,17 @@
-/*{
-  _id: ObjectId,
+import mongoose from "mongoose";
 
+const UsersSchema = new mongoose.Schema({
   username: String,
   email: String,
   passwordHash: String,
-
   avatar: String,
-  banner: String,
   bio: String,
-
   favoriteGenres: [String],
-
-  createdAt: Date,
-  updatedAt: Date,
-
   followersCount: Number,
   followingCount: Number,
-
   gamesCompleted: Number,
   totalHoursPlayed: Number,
+});
 
-  profileVisibility: {
-    type: String,
-    enum: ["public", "private"],
-    default: "public"
-  }
-}
-  */
+const Users = mongoose.model("Users", UsersSchema);
+export default Users;

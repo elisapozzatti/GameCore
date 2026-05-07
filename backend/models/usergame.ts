@@ -1,9 +1,8 @@
-/*{
-  _id: ObjectId,
+import mongoose from "mongoose";
 
-  userId: ObjectId,
-  gameId: ObjectId,
-
+const UserGameSchema = new mongoose.Schema({
+  userId: mongoose.Schema.Types.ObjectId,
+  gameId: mongoose.Schema.Types.ObjectId,
   status: {
     type: String,
     enum: [
@@ -12,27 +11,18 @@
       "paused",
       "completed",
       "dropped",
-      "replaying"
-    ]
+      "replaying",
+    ],
   },
-
   completionPercentage: Number,
-
   personalRating: Number,
-
   inspirationLevel: Number,
-
   hoursPlayed: Number,
-
   isFavorite: Boolean,
-
   wouldRecommend: Boolean,
-
   notes: String,
+});
 
-  startedAt: Date,
-  completedAt: Date,
+const UserGame = mongoose.model("UserGame", UserGameSchema);
 
-  createdAt: Date,
-  updatedAt: Date
-}*/
+export default UserGame;
