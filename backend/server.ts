@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import games from "./routes/games.ts";
 import users from "./routes/users.ts";
+import usergame from "./routes/usergame.ts";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ async function start() {
     //routes
     app.use("/games", games);
     app.use("/users", users);
+    app.use("/usergame", usergame);
 
     //server
     const port = process.env.PORT || 3000;
