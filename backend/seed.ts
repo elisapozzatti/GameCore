@@ -2,6 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import { fetchGames } from "./services/igdb.service.ts";
 import Games from "./models/games.ts";
 import Users from "./models/users.ts";
 import UserGame from "./models/usergame.ts";
@@ -23,45 +24,6 @@ async function getAccessToken() {
   );
   console.log("token ok");
   return tokenResponse.data.access_token;
-}
-
-async function fetchGames(token: string, limit: number, offset: number) {
-  try {
-    const date = new Date();
-    const now = new Date(date.getFullYear() - 1, 0, 1); //1 gennaio anno scorso
-    const nowTs = Math.floor(now.getTime() / 1000); //converte data in timestamp
-    //chiede i giochi a twitch (IGDB)
-    const gamesResponse = await axios.post(
-      "https://api.igdb.com/v4/games",
-      `
-        fields
-            id,
-            name,
-            genres.name,
-            cover.url,
-            rating,
-            summary,
-            follows,
-            first_release_date,
-            involved_companies.company.name,
-            involved_companies.publisher;
-        where platforms = (48, 167, 49, 169, 130) & (rating > 70 | first_release_date > ${nowTs} );
-        sort name desc;
-        limit ${limit};
-        offset ${offset};
-        `,
-      {
-        headers: {
-          "Client-ID": process.env.TWITCH_CLIENT_ID,
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      },
-    );
-    return gamesResponse.data;
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 async function seed() {
@@ -115,7 +77,6 @@ async function seed() {
         hasMore = false;
         break;
       }
-
       for (const game of games) {
         await Games.updateOne(
           { igdbId: game.id },

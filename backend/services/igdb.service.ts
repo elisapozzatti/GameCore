@@ -1,29 +1,43 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
-import Games from "../models/games.ts";
 
 dotenv.config();
 
-/*
-export async function getAccessToken() {
+export async function fetchGames(token: string, limit: number, offset: number) {
   try {
-    const response = await axios.post(
-      "https://id.twitch.tv/oauth2/token",
-      null,
+    const date = new Date();
+    const now = new Date(date.getFullYear() - 1, 0, 1); //1 gennaio anno scorso
+    const nowTs = Math.floor(now.getTime() / 1000); //converte data in timestamp
+    //chiede i giochi a twitch (IGDB)
+    const gamesResponse = await axios.post(
+      "https://api.igdb.com/v4/games",
+      `
+        fields
+            id,
+            name,
+            genres.name,
+            cover.url,
+            rating,
+            summary,
+            follows,
+            first_release_date,
+            involved_companies.company.name,
+            involved_companies.publisher;
+        where platforms = (48, 167, 49, 169, 130) & (rating > 70 | first_release_date > ${nowTs} );
+        sort name desc;
+        limit ${limit};
+        offset ${offset};
+        `,
       {
-        params: {
-          client_id: process.env.TWITCH_CLIENT_ID,
-          client_secret: process.env.TWITCH_CLIENT_SECRET,
-          grant_type: "client_credentials",
+        headers: {
+          "Client-ID": process.env.TWITCH_CLIENT_ID,
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
         },
       },
     );
-    console.log(response.data);
+    return gamesResponse.data;
   } catch (error) {
     console.error(error);
   }
 }
-
-getAccessToken();
-*/
