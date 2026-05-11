@@ -57,7 +57,7 @@ router.get("/play/:id", auth, async (req, res) => {
       userId: new mongoose.Types.ObjectId(userId),
     });
 
-    const status = usergame.find((item) => item.status === "playing");
+    const status = usergame.filter((item) => item.status === "playing");
     res.json(status);
   } catch (error) {
     console.error(
@@ -76,8 +76,15 @@ router.get("/complete/:id", auth, async (req, res) => {
       userId: new mongoose.Types.ObjectId(userId),
     });
 
-    const complete = usergame.find((item) => item.status === "completed");
-    res.json(complete);
+    const complete = usergame.filter((item) => item.status === "completed");
+
+    if (!complete) return;
+    let count = 0;
+    complete.forEach((c) => {
+      count += 1;
+    });
+
+    res.json(count);
   } catch (error) {
     console.error(
       "Errore nel recupero dei videogiochi completati dell'utente",
@@ -119,6 +126,7 @@ router.get("/hours/:id", auth, async (req, res) => {
   }
 });*/
 
+//aggiungi un gioco
 router.post("/:id", auth, async (req: any, res) => {
   try {
     const id = req.params.id;

@@ -1,13 +1,22 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 import games from "./routes/games.ts";
 import users from "./routes/users.ts";
 import usergame from "./routes/usergame.ts";
+import auth from "./routes/auth.ts";
 
 dotenv.config();
 
 const app = express();
+app.use(
+  cors({
+    origin: "http://localhost:8081",
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
 async function start() {
@@ -21,6 +30,7 @@ async function start() {
     console.log("Connesso al db");
 
     //routes
+    app.use("/", auth);
     app.use("/games", games);
     app.use("/users", users);
     app.use("/usergame", usergame);
