@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import auth from "../middleware/auth.ts";
 import UserGameSchema from "../models/usergame.ts";
 import GamesSchema from "../models/games.ts";
+import UsersSchema from "../models/users.ts";
 
 const router = express.Router();
 
@@ -23,7 +24,19 @@ router.get("/:id", auth, async (req, res) => {
     const usergame = await UserGameSchema.find({
       userId: new mongoose.Types.ObjectId(userId),
     });
-    res.json(usergame);
+
+    const result = await Promise.all(
+      usergame.map(async (item) => {
+        const games = await GamesSchema.findById(item.gameId).lean();
+
+        return {
+          ...item.toObject(),
+          game: games,
+        };
+      }),
+    );
+
+    res.json(result);
   } catch (error) {
     console.error("Errore nel recupero dei videogiochi dell'utente", error);
     res.status(400);
@@ -39,7 +52,8 @@ router.get("/prefer/:id", auth, async (req, res) => {
     });
 
     const prefer = usergame.find((item) => item.isFavorite === true);
-    res.json(prefer);
+    const game = await GamesSchema.findById(prefer?.gameId);
+    res.json({ ...prefer, game });
   } catch (error) {
     console.error(
       "Errore nel recupero del videogioco preferito dell'utente",
@@ -57,8 +71,20 @@ router.get("/play/:id", auth, async (req, res) => {
       userId: new mongoose.Types.ObjectId(userId),
     });
 
-    const status = usergame.filter((item) => item.status === "playing");
-    res.json(status);
+    const play = usergame.filter((item) => item.status === "playing");
+
+    const result = await Promise.all(
+      play.map(async (item) => {
+        const game = await GamesSchema.findById(item.gameId).lean();
+
+        return {
+          ...item.toObject(),
+          game,
+        };
+      }),
+    );
+
+    res.json(result);
   } catch (error) {
     console.error(
       "Errore nel recupero dei videogiochi in gioco dell'utente",
@@ -78,13 +104,18 @@ router.get("/complete/:id", auth, async (req, res) => {
 
     const complete = usergame.filter((item) => item.status === "completed");
 
-    if (!complete) return;
-    let count = 0;
-    complete.forEach((c) => {
-      count += 1;
-    });
+    const result = await Promise.all(
+      complete.map(async (item) => {
+        const game = await GamesSchema.findById(item.gameId).lean();
 
-    res.json(count);
+        return {
+          ...item.toObject(),
+          game,
+        };
+      }),
+    );
+
+    res.json(result);
   } catch (error) {
     console.error(
       "Errore nel recupero dei videogiochi completati dell'utente",
@@ -94,7 +125,7 @@ router.get("/complete/:id", auth, async (req, res) => {
   }
 });
 
-/*//ore di gioco totali di un utente
+//ore di gioco totali di un utente
 router.get("/hours/:id", auth, async (req, res) => {
   try {
     const userId = req.params.id;
@@ -114,7 +145,7 @@ router.get("/hours/:id", auth, async (req, res) => {
       { hoursPlayed: hours },
       { returnDocument: "after" },
     );
-    //await updateUser?.save();
+    await updateUser?.save();
 
     res.json(hours);
   } catch (error) {
@@ -124,7 +155,7 @@ router.get("/hours/:id", auth, async (req, res) => {
     );
     res.status(400);
   }
-});*/
+});
 
 //aggiungi un gioco
 router.post("/:id", auth, async (req: any, res) => {

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import theme from "../theme/theme";
 
 import api from "../api/api";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +21,8 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [focused, setFocused] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -47,14 +50,18 @@ export default function Login() {
         placeholder="username"
         value={username}
         onChangeText={setUsername}
-        style={styles.input}
+        style={[styles.input, focused && styles.inputActive]}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
 
       <TextInput
         placeholder="email"
         value={email}
         onChangeText={setEmail}
-        style={styles.input}
+        style={[styles.input, focused && styles.inputActive]}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
 
       <TextInput
@@ -62,7 +69,9 @@ export default function Login() {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        style={styles.input}
+        style={[styles.input, focused && styles.inputActive]}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
 
       <Pressable style={styles.button} onPress={handleLogin}>
@@ -87,17 +96,28 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    textAlign: "center",
+    color: theme.colors.primary,
   },
 
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: theme.colors.primary,
     padding: 12,
     borderRadius: 8,
+    color: theme.colors.primary,
+  },
+
+  inputActive: {
+    borderWidth: 1,
+    borderColor: theme.colors.secondary,
+    padding: 12,
+    borderRadius: 8,
+    color: theme.colors.secondary,
   },
 
   button: {
-    backgroundColor: "#2563eb",
+    backgroundColor: theme.colors.primary,
     padding: 12,
     borderRadius: 8,
     alignItems: "center",
@@ -109,7 +129,7 @@ const styles = StyleSheet.create({
   },
 
   link: {
-    color: "#2563eb",
+    color: theme.colors.primary,
     textAlign: "center",
   },
 });
