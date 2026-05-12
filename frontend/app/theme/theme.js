@@ -8,6 +8,7 @@ const theme = {
     text: "#F0F0F5",
     text2: "#8E44AD",
     danger: "#EF4444",
+    gold: "#B8860B",
   },
 
   fontFamily: {

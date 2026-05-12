@@ -20,7 +20,7 @@ export default function Register() {
 
   const handleRegister = async () => {
     try {
-      await api.post("http://localhost:3000/register", {
+      await api.post("/register", {
         username: username,
         email,
         password: password,

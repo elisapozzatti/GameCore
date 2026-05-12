@@ -16,31 +16,31 @@ export default function Homepage() {
   useEffect(() => {
     if (user) {
       api
-        .get(`http://localhost:3000/usergame/complete/${user.id}`)
+        .get(`/usergame/complete/${user.id}`)
         .then((res) => {
           setSessionCompleted(res.data);
         })
         .catch((err) => console.log(err));
       api
-        .get(`http://localhost:3000/usergame/play/${user.id}`)
+        .get(`/usergame/play/${user.id}`)
         .then((res) => {
           setSessionActive(res.data);
         })
         .catch((err) => console.log(err));
       api
-        .get(`http://localhost:3000/usergame/prefer/${user.id}`)
+        .get(`/usergame/prefer/${user.id}`)
         .then((res) => {
           setPrefer(res.data);
         })
         .catch((err) => console.log(err));
       api
-        .get<number>(`http://localhost:3000/usergame/hours/${user.id}`)
+        .get<number>(`/usergame/hours/${user.id}`)
         .then((res) => {
           setHours(res.data);
         })
         .catch((err) => console.log(err));
       api
-        .get(`http://localhost:3000/usergame/${user.id}`)
+        .get(`/usergame/${user.id}`)
         .then((res) => {
           setAllGames(res.data);
         })
@@ -57,127 +57,185 @@ export default function Homepage() {
       }}
     >
       <Header />
+
       <View
         style={{
-          flexDirection: "row",
-          gap: 10,
+          backgroundColor: theme.colors.card,
+          width: "95%",
+          height: 100,
+          borderRadius: 10,
           marginBottom: 10,
-          width: "100%",
-          padding: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 10,
+          flexDirection: "column",
         }}
       >
-        <ScrollView
-          contentContainerStyle={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 10,
-          }}
-          style={{
-            backgroundColor: theme.colors.card,
-            width: "30%",
-            height: 100,
-            borderRadius: 10,
-          }}
-        >
+        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+          <View
+            style={{
+              backgroundColor: theme.colors.secondary,
+              padding: 5,
+              borderRadius: 5,
+            }}
+          >
+            <Image source={require("../../assets/images/checklist.webp")} />
+          </View>
+          <Text
+            style={{
+              color: theme.colors.text,
+              fontFamily: theme.fontFamily.ox,
+            }}
+          >
+            GIOCHI COMPLETATI
+          </Text>
+          <Text
+            style={{
+              backgroundColor: theme.colors.secondary,
+              color: theme.colors.text,
+              padding: 5,
+              borderRadius: 5,
+              fontFamily: theme.fontFamily.ox,
+            }}
+          >
+            + altri 3
+          </Text>
+        </View>
+        <View style={{ flexDirection: "row", gap: 10 }}>
           {sessionCompleted.map((item: any, index: any) => (
             <Image
+              key={index}
               source={{ uri: item?.game?.coverImage }}
-              style={{ width: 80, height: 80 }}
+              style={{ width: 50, height: 50 }}
             />
           ))}
-        </ScrollView>
+        </View>
+      </View>
 
-        <ScrollView
-          contentContainerStyle={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 10,
-          }}
+      <ScrollView
+        style={{
+          backgroundColor: theme.colors.card,
+          width: "95%",
+          height: 100,
+          borderRadius: 10,
+          marginBottom: 10,
+        }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 10,
+        }}
+      >
+        <View
           style={{
-            backgroundColor: theme.colors.card,
-            width: "30%",
+            flexDirection: "row",
+            gap: 10,
+            alignItems: "center",
+            padding: 10,
+            width: "95%",
             height: 100,
-            borderRadius: 10,
           }}
         >
           {sessionActive.map((item: any, index: any) => (
             <View
-              style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+              key={index}
+              style={{
+                flexDirection: "row",
+                gap: 10,
+                alignItems: "center",
+                backgroundColor: theme.colors.secondary,
+                padding: 5,
+                borderRadius: 5,
+                width: "100%",
+              }}
             >
               <Image
                 source={{ uri: item?.game?.coverImage }}
-                style={{ width: 80, height: 80 }}
+                style={{ width: 70, height: 70 }}
               />
-              <View
-                style={{
-                  width: "80%",
-                  backgroundColor: theme.colors.text,
-                  borderRadius: 5,
-                }}
-              >
+              <View style={{ gap: 5 }}>
+                <Text style={{ color: theme.colors.text }}>
+                  {item?.game?.title}
+                </Text>
                 <View
-                  style={{
-                    backgroundColor: theme.colors.primary,
-                    width: `${item.completionPercentage}%`,
-                    height: 10,
-                    borderRadius: 5,
-                  }}
-                />
+                  style={{ flexDirection: "row", gap: 5, alignItems: "center" }}
+                >
+                  <View
+                    style={{
+                      width: "40%",
+                      backgroundColor: theme.colors.text,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: theme.colors.primary,
+                        width: `${item.completionPercentage}%`,
+                        height: 10,
+                        borderRadius: 5,
+                        alignItems: "flex-end",
+                        justifyContent: "center",
+                        paddingRight: 5,
+                      }}
+                    ></View>
+                  </View>
+                  <Text style={{ color: theme.colors.text, fontSize: 12 }}>
+                    {item.completionPercentage}%
+                  </Text>
+                </View>
+                <Text style={{ color: theme.colors.text, fontSize: 12 }}>
+                  Tempo di gioco: {item.hoursPlayed}h
+                </Text>
               </View>
             </View>
           ))}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
+
       <View
         style={{
+          justifyContent: "center",
+          alignItems: "center",
           flexDirection: "row",
+          backgroundColor: theme.colors.card,
+          width: "95%",
+          height: 100,
+          borderRadius: 10,
           gap: 10,
           marginBottom: 10,
-          width: "100%",
           padding: 10,
         }}
       >
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row",
-            backgroundColor: theme.colors.card,
-            width: "67%",
-            height: 100,
-            borderRadius: 10,
-            gap: 10,
-          }}
-        >
-          <Image
-            source={{ uri: prefer?.game?.coverImage }}
-            style={{ width: 100, height: 100 }}
-          />
-          <View>
+        <Image
+          source={{ uri: prefer?.game?.coverImage }}
+          style={{ width: 80, height: 80 }}
+        />
+        <View>
+          <View style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
             <Text style={{ color: theme.colors.text }}>
               {prefer?.game?.title}
             </Text>
-            <Text style={{ color: theme.colors.text }}>
-              {prefer?._doc?.hoursPlayed}h
-            </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 5,
+                alignItems: "center",
+                backgroundColor: theme.colors.gold,
+                padding: 3,
+                borderRadius: 10,
+              }}
+            >
+              <Text style={{ color: theme.colors.text, fontSize: 12 }}>
+                PREFERITO
+              </Text>
+              <Image
+                source={require("../../assets/images/star.webp")}
+                style={{ width: 15, height: 15 }}
+              />
+            </View>
           </View>
-        </View>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: theme.colors.card,
-            width: "30%",
-            height: 100,
-            borderRadius: 10,
-          }}
-        >
-          <Text
-            style={{
-              color: theme.colors.text,
-            }}
-          >
-            {hours}h totali giocate
+          <Text style={{ color: theme.colors.text }}>
+            {prefer?._doc?.hoursPlayed}h giocate
           </Text>
         </View>
       </View>
@@ -185,7 +243,7 @@ export default function Homepage() {
         style={{
           flexDirection: "row",
           gap: 10,
-          width: "100%",
+          width: "95%",
           padding: 10,
         }}
       >
@@ -194,30 +252,41 @@ export default function Homepage() {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: theme.colors.card,
-            width: "30%",
+            width: "50%",
             height: 100,
             borderRadius: 10,
           }}
         >
+          <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+            <Image source={require("../../assets/images/clock.webp")} />
+            <Text
+              style={{
+                color: theme.colors.text,
+                fontSize: theme.fontSize.lg,
+                fontWeight: "bold",
+              }}
+            >
+              {hours}h
+            </Text>
+          </View>
           <Text
             style={{
               color: theme.colors.text,
             }}
           >
-            ?
+            ore totali giocate
           </Text>
         </View>
-        <ScrollView
-          contentContainerStyle={{
+        <View
+          style={{
+            backgroundColor: theme.colors.card,
+            width: "50%",
+            height: 100,
+            borderRadius: 10,
             justifyContent: "center",
             alignItems: "center",
             gap: 10,
-          }}
-          style={{
-            backgroundColor: theme.colors.card,
-            width: "70%",
-            height: 100,
-            borderRadius: 10,
+            flexDirection: "row",
           }}
         >
           {allGames.map((item: any, index: any) => (
@@ -226,7 +295,18 @@ export default function Homepage() {
               style={{ width: 80, height: 80 }}
             />
           ))}
-        </ScrollView>
+          <Text
+            style={{
+              backgroundColor: theme.colors.secondary,
+              color: theme.colors.text,
+              padding: 5,
+              borderRadius: 5,
+              fontFamily: theme.fontFamily.ox,
+            }}
+          >
+            Vedi tutti i giochi
+          </Text>
+        </View>
       </View>
     </View>
   );

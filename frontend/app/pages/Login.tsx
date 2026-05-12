@@ -26,7 +26,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const res = await api.post("http://localhost:3000/login", {
+      const res = await api.post("/login", {
         username,
         email,
         password,
