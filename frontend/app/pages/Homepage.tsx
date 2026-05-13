@@ -57,7 +57,7 @@ export default function Homepage() {
       }}
     >
       <Header />
-
+      {/*prima riga con giochi completati*/}
       <View
         style={{
           backgroundColor: theme.colors.card,
@@ -71,15 +71,26 @@ export default function Homepage() {
           flexDirection: "column",
         }}
       >
-        <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            alignItems: "center",
+            width: "95%",
+          }}
+        >
           <View
             style={{
               backgroundColor: theme.colors.secondary,
               padding: 5,
               borderRadius: 5,
+              alignItems: "center",
             }}
           >
-            <Image source={require("../../assets/images/checklist.webp")} />
+            <Image
+              source={require("../../assets/images/checklist.webp")}
+              style={{ width: 15, height: 15 }}
+            />
           </View>
           <Text
             style={{
@@ -96,6 +107,7 @@ export default function Homepage() {
               padding: 5,
               borderRadius: 5,
               fontFamily: theme.fontFamily.ox,
+              marginLeft: "auto",
             }}
           >
             + altri 3
@@ -111,7 +123,7 @@ export default function Homepage() {
           ))}
         </View>
       </View>
-
+      {/*seconda riga con i giochi in corso*/}
       <ScrollView
         style={{
           backgroundColor: theme.colors.card,
@@ -154,7 +166,12 @@ export default function Homepage() {
                 style={{ width: 70, height: 70 }}
               />
               <View style={{ gap: 5 }}>
-                <Text style={{ color: theme.colors.text }}>
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    width: "95%",
+                  }}
+                >
                   {item?.game?.title}
                 </Text>
                 <View
@@ -191,7 +208,7 @@ export default function Homepage() {
           ))}
         </View>
       </ScrollView>
-
+      {/*terza riga con il gioco preferito*/}
       <View
         style={{
           justifyContent: "center",
@@ -202,7 +219,7 @@ export default function Homepage() {
           height: 100,
           borderRadius: 10,
           gap: 10,
-          marginBottom: 10,
+          marginBottom: 5,
           padding: 10,
         }}
       >
@@ -210,41 +227,48 @@ export default function Homepage() {
           source={{ uri: prefer?.game?.coverImage }}
           style={{ width: 80, height: 80 }}
         />
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 5,
+            alignItems: "center",
+            backgroundColor: theme.colors.gold,
+            padding: 3,
+            borderRadius: 10,
+            position: "absolute",
+            right: 5,
+            top: 5,
+          }}
+        >
+          <Text style={{ color: theme.colors.text, fontSize: 12 }}>
+            PREFERITO
+          </Text>
+          <Image
+            source={require("../../assets/images/star.webp")}
+            style={{ width: 15, height: 15 }}
+          />
+        </View>
         <View>
-          <View style={{ flexDirection: "row", gap: 20, alignItems: "center" }}>
-            <Text style={{ color: theme.colors.text }}>
-              {prefer?.game?.title}
-            </Text>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 5,
-                alignItems: "center",
-                backgroundColor: theme.colors.gold,
-                padding: 3,
-                borderRadius: 10,
-              }}
-            >
-              <Text style={{ color: theme.colors.text, fontSize: 12 }}>
-                PREFERITO
-              </Text>
-              <Image
-                source={require("../../assets/images/star.webp")}
-                style={{ width: 15, height: 15 }}
-              />
-            </View>
-          </View>
+          <Text
+            style={{
+              color: theme.colors.text,
+            }}
+          >
+            {prefer?.game?.title}
+          </Text>
           <Text style={{ color: theme.colors.text }}>
             {prefer?._doc?.hoursPlayed}h giocate
           </Text>
         </View>
       </View>
+      {/*4 riga con ore giocate e tutti i giochi*/}
       <View
         style={{
           flexDirection: "row",
           gap: 10,
           width: "95%",
           padding: 10,
+          boxSizing: "border-box",
         }}
       >
         <View
@@ -292,7 +316,7 @@ export default function Homepage() {
           {allGames.map((item: any, index: any) => (
             <Image
               source={{ uri: item?.game?.coverImage }}
-              style={{ width: 80, height: 80 }}
+              style={{ width: 50, height: 50, marginTop: 20 }}
             />
           ))}
           <Text
@@ -302,11 +326,40 @@ export default function Homepage() {
               padding: 5,
               borderRadius: 5,
               fontFamily: theme.fontFamily.ox,
+              position: "absolute",
+              right: 5,
+              top: 5,
             }}
           >
-            Vedi tutti i giochi
+            Vedi tutti
           </Text>
         </View>
+      </View>
+      {/*quinta riga con bottone per aggiungere gioco*/}
+      <View
+        style={{
+          alignItems: "center",
+          width: "95%",
+          padding: 10,
+          borderRadius: 10,
+        }}
+      >
+        <Text
+          style={{
+            color: theme.colors.text,
+            backgroundColor: theme.colors.secondary,
+            fontSize: theme.fontSize.xl,
+            fontWeight: "bold",
+            marginLeft: "auto",
+            padding: 5,
+            borderRadius: 5,
+            marginBottom: 20,
+            aspectRatio: 1,
+            textAlign: "center",
+          }}
+        >
+          +
+        </Text>
       </View>
     </View>
   );

@@ -1,3 +1,4 @@
+Ancora in sviluppo.
 Applicazione sviluppata con react native, express e mongodb.
 
 breve spiegazione:
@@ -7,7 +8,7 @@ Potranno visualizzare i loro dati con il genere più giocato, il gioco preferito
 Inoltre ci sarà una parte dell'applicazione dedicata a vedere come sono messi gli altri utenti su altri giochi o altro.
 
 sviluppo:
--sviluppo applicazione fullstack per gestione progetti e task
+-sviluppo applicazione fullstack per gestione dei giochi per ogni utente
 -sistema di autenticazione
 -CRUD completo sui giochi
 -gestione percentuale di completamento dei giochi
@@ -19,4 +20,4 @@ come eseguire:
 - clona la repoitory
 - frontend: npm install e poi npx expo start (se si scannerizza il qrcode e si ha sul telefono l'app "expo go" si può
   visualizzare da telefono)
-- backend:
+- backend: node server.ts

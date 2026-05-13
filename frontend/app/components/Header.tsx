@@ -18,7 +18,7 @@ export default function Header() {
         height: 60,
         backgroundColor: theme.colors.background,
         padding: 10,
-        marginBottom: 10,
+        marginBottom: 5,
       }}
     >
       <Image
