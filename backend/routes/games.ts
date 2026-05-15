@@ -16,9 +16,9 @@ router.get("/", async (req, res) => {
 });
 
 //get nome del gioco in base a quello che scrive l'utente nella barra di ricerca
-router.get("/search", async (req, res) => {
+router.get("/search/:query", async (req, res) => {
   try {
-    const query = req.query.q as string;
+    const query = req.params.query as string;
 
     if (!query || query.trim().length < 2) {
       return res.json([]);

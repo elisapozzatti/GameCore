@@ -34,11 +34,10 @@ export default function AddGame() {
       return;
     }
 
-    const res = api
-      .get(`/games/search?q=${encodeURIComponent(value)}`)
-      .then((res) => {
-        setResults(res.data);
-      });
+    const res = await api.get(`/games/search/${encodeURIComponent(value)}`);
+    console.log("RESULTS:", res.data);
+
+    setResults(res.data);
   }
 
   function handleSelectGame(game: any) {
