@@ -203,4 +203,15 @@ router.post("/:id", auth, async (req: any, res) => {
   }
 });
 
+/*const alreadyExists = await UserGame.findOne({
+  userId,
+  igdbId: game.id,
+});
+
+if (alreadyExists) {
+  return res.status(400).json({
+    message: "Gioco già aggiunto",
+  });
+}*/
+
 export default router;

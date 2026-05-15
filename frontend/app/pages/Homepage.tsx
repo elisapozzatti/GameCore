@@ -1,9 +1,11 @@
-import { Text, View, Image, ScrollView } from "react-native";
+import { Text, View, Image, ScrollView, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import theme from "../theme/theme";
 import Header from "../components/Header";
 import api from "../api/api";
 import { useAuth } from "../../context/AuthContext";
+import Footer from "../components/Footer";
+import AddGame from "../components/AddGame";
 
 export default function Homepage() {
   const { user, logout } = useAuth();
@@ -12,6 +14,7 @@ export default function Homepage() {
   const [prefer, setPrefer] = useState<any>({});
   const [hours, setHours] = useState<number>(0);
   const [allGames, setAllGames] = useState<any>([]);
+  const [addGame, setAddGame] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -269,6 +272,8 @@ export default function Homepage() {
           width: "95%",
           padding: 10,
           boxSizing: "border-box",
+          margin: 0,
+          height: 100,
         }}
       >
         <View
@@ -338,10 +343,10 @@ export default function Homepage() {
       {/*quinta riga con bottone per aggiungere gioco*/}
       <View
         style={{
-          alignItems: "center",
           width: "95%",
           padding: 10,
           borderRadius: 10,
+          height: 70,
         }}
       >
         <Text
@@ -353,14 +358,16 @@ export default function Homepage() {
             marginLeft: "auto",
             padding: 5,
             borderRadius: 5,
-            marginBottom: 20,
             aspectRatio: 1,
             textAlign: "center",
           }}
+          onPress={() => setAddGame(true)}
         >
           +
         </Text>
       </View>
+      <Footer />
+      {addGame && <AddGame />}
     </View>
   );
 }
