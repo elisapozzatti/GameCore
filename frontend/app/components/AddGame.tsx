@@ -17,6 +17,8 @@ export default function AddGame() {
   const [selectedGame, setSelectedGame] = useState<any>(null);
 
   const [status, setStatus] = useState("wishlist");
+  const [statusOpen, setStatusOpen] = useState(false);
+
   const [completion, setCompletion] = useState("");
   const [rating, setRating] = useState("");
   const [inspiration, setInspiration] = useState("");
@@ -26,7 +28,6 @@ export default function AddGame() {
   const [notes, setNotes] = useState("");
 
   async function handleSearch(value: string) {
-    console.log("SEARCH:", value);
     setQuery(value);
 
     if (value.trim().length < 2) {
@@ -34,10 +35,14 @@ export default function AddGame() {
       return;
     }
 
-    const res = await api.get(`/games/search/${encodeURIComponent(value)}`);
-    console.log("RESULTS:", res.data);
+    try {
+      const res = await api.get(`/games/search/${encodeURIComponent(value)}`);
 
-    setResults(res.data);
+      setResults(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.log("SEARCH ERROR:", err);
+      setResults([]);
+    }
   }
 
   function handleSelectGame(game: any) {
@@ -62,13 +67,9 @@ export default function AddGame() {
       notes,
     };
 
-    await fetch("/api/user/games", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const res = await api.post(`/usergame/${selectedGame.id}`, payload);
+
+    console.log("GAME SAVED:", res.data);
 
     //reset
     setQuery("");
@@ -84,146 +85,205 @@ export default function AddGame() {
   }
 
   return (
-    <ScrollView
+    <View
       style={{
-        padding: 20,
-        backgroundColor: theme.colors.secondary,
-        borderRadius: 10,
+        height: "90%",
         position: "absolute",
         top: "10%",
         left: "5%",
         right: "5%",
-        zIndex: 10,
-        height: "90%",
+        backgroundColor: theme.colors.secondary,
       }}
     >
-      {/*ricerca del nome del gioco*/}
-      <Text style={{ marginBottom: 8 }}>
-        Aggiungi un gioco alla tua collezione
-      </Text>
-
-      <TextInput
-        placeholder="Cerca un gioco..."
-        value={query}
-        onChangeText={handleSearch}
-        style={{
-          padding: 10,
-          borderWidth: 1,
-          borderRadius: 6,
-          marginBottom: 10,
-        }}
-      />
-
-      {results.map((game: any) => (
-        <TouchableOpacity
-          key={game.id}
-          onPress={() => handleSelectGame(game)}
+      {/* AUTOCOMPLETE DROPDOWN */}
+      {results.length > 0 && (
+        <View
           style={{
-            padding: 10,
-            borderBottomWidth: 1,
+            position: "absolute",
+            top: 120,
+            left: 20,
+            right: 20,
+            backgroundColor: "white",
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: "#ddd",
+            zIndex: 9999,
+            elevation: 20,
+            maxHeight: 200,
           }}
         >
-          <Text>{game.name}</Text>
-        </TouchableOpacity>
-      ))}
+          {results.map((game: any) => (
+            <TouchableOpacity
+              key={game.id}
+              onPress={() => handleSelectGame(game)}
+              style={{
+                padding: 10,
+                borderBottomWidth: 1,
+                borderColor: "#eee",
+              }}
+            >
+              <Text>{game.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
-      {/*status*/}
-      <Text style={{ marginTop: 20 }}>Stato del gioco</Text>
-
-      {[
-        "wishlist",
-        "playing",
-        "paused",
-        "completed",
-        "dropped",
-        "replaying",
-      ].map((s) => (
-        <Pressable
-          key={s}
-          onPress={() => setStatus(s)}
-          style={{
-            padding: 8,
-            marginVertical: 2,
-            backgroundColor:
-              status === s ? theme.colors.primary : "transparent",
-          }}
-        >
-          <Text style={{ color: status === s ? "white" : "black" }}>{s}</Text>
-        </Pressable>
-      ))}
-
-      {/*inputs*/}
-      <Text style={{ marginTop: 20 }}>Percentuale completamento</Text>
-      <TextInput
-        keyboardType="numeric"
-        value={completion}
-        onChangeText={setCompletion}
-        style={{ borderWidth: 1, padding: 8 }}
-      />
-
-      <Text style={{ marginTop: 20 }}>Valutazione (0-10)</Text>
-      <TextInput
-        keyboardType="numeric"
-        value={rating}
-        onChangeText={setRating}
-        style={{ borderWidth: 1, padding: 8 }}
-      />
-
-      <Text style={{ marginTop: 20 }}>Ispirazione (0-10)</Text>
-      <TextInput
-        keyboardType="numeric"
-        value={inspiration}
-        onChangeText={setInspiration}
-        style={{ borderWidth: 1, padding: 8 }}
-      />
-
-      <Text style={{ marginTop: 20 }}>Ore giocate</Text>
-      <TextInput
-        keyboardType="numeric"
-        value={hours}
-        onChangeText={setHours}
-        style={{ borderWidth: 1, padding: 8 }}
-      />
-
-      {/*gioco preferito e se lo consigli (switch) */}
-      <View style={{ marginTop: 20 }}>
-        <Text>Gioco preferito?</Text>
-        <Switch value={favorite} onValueChange={setFavorite} />
-      </View>
-
-      <View style={{ marginTop: 10 }}>
-        <Text>Lo consiglieresti?</Text>
-        <Switch value={recommend} onValueChange={setRecommend} />
-      </View>
-
-      {/*note*/}
-      <Text style={{ marginTop: 20 }}>Note personali</Text>
-      <TextInput
-        multiline
-        value={notes}
-        onChangeText={setNotes}
+      <ScrollView
         style={{
-          borderWidth: 1,
-          padding: 10,
-          height: 100,
-          marginBottom: 20,
-        }}
-      />
-
-      {/*bottone aggiungi gioco*/}
-      <Pressable
-        onPress={handleSubmit}
-        style={{
-          backgroundColor: theme.colors.primary,
-          padding: 15,
-          borderRadius: 8,
-          alignItems: "center",
+          padding: 20,
+          backgroundColor: theme.colors.secondary,
         }}
       >
-        <Text style={{ color: "white", fontWeight: "bold" }}>
-          Aggiungi gioco
+        <Text style={{ marginBottom: 8 }}>
+          Aggiungi un gioco alla tua collezione
         </Text>
-      </Pressable>
-    </ScrollView>
+
+        {/* SEARCH */}
+        <TextInput
+          placeholder="Cerca un gioco..."
+          value={query}
+          onChangeText={handleSearch}
+          style={{
+            padding: 10,
+            borderWidth: 1,
+            borderRadius: 6,
+            marginBottom: 10,
+            backgroundColor: "white",
+          }}
+        />
+
+        {/* STATUS DROPDOWN */}
+        <Text style={{ marginTop: 20 }}>Stato del gioco</Text>
+
+        <Pressable
+          onPress={() => setStatusOpen(!statusOpen)}
+          style={{
+            padding: 10,
+            borderWidth: 1,
+            borderRadius: 6,
+            marginTop: 10,
+            backgroundColor: "white",
+          }}
+        >
+          <Text>{status}</Text>
+        </Pressable>
+
+        {statusOpen && (
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: "#ddd",
+              borderRadius: 6,
+              backgroundColor: "white",
+              marginTop: 5,
+            }}
+          >
+            {[
+              "wishlist",
+              "playing",
+              "paused",
+              "completed",
+              "dropped",
+              "replaying",
+            ].map((s) => (
+              <Pressable
+                key={s}
+                onPress={() => {
+                  setStatus(s);
+                  setStatusOpen(false);
+                }}
+                style={{
+                  padding: 10,
+                  borderBottomWidth: 1,
+                  borderColor: "#eee",
+                }}
+              >
+                <Text
+                  style={{
+                    color: status === s ? theme.colors.primary : "black",
+                  }}
+                >
+                  {s}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+
+        {/* INPUTS */}
+        <Text style={{ marginTop: 20 }}>Percentuale completamento</Text>
+        <TextInput
+          keyboardType="numeric"
+          value={completion}
+          onChangeText={setCompletion}
+          style={{ borderWidth: 1, padding: 8 }}
+        />
+
+        <Text style={{ marginTop: 20 }}>Valutazione (0-10)</Text>
+        <TextInput
+          keyboardType="numeric"
+          value={rating}
+          onChangeText={setRating}
+          style={{ borderWidth: 1, padding: 8 }}
+        />
+
+        <Text style={{ marginTop: 20 }}>Ispirazione (0-10)</Text>
+        <TextInput
+          keyboardType="numeric"
+          value={inspiration}
+          onChangeText={setInspiration}
+          style={{ borderWidth: 1, padding: 8 }}
+        />
+
+        <Text style={{ marginTop: 20 }}>Ore giocate</Text>
+        <TextInput
+          keyboardType="numeric"
+          value={hours}
+          onChangeText={setHours}
+          style={{ borderWidth: 1, padding: 8 }}
+        />
+
+        {/* SWITCHES */}
+        <View style={{ marginTop: 20 }}>
+          <Text>Gioco preferito?</Text>
+          <Switch value={favorite} onValueChange={setFavorite} />
+        </View>
+
+        <View style={{ marginTop: 10 }}>
+          <Text>Lo consiglieresti?</Text>
+          <Switch value={recommend} onValueChange={setRecommend} />
+        </View>
+
+        {/* NOTES */}
+        <Text style={{ marginTop: 20 }}>Note personali</Text>
+        <TextInput
+          multiline
+          value={notes}
+          onChangeText={setNotes}
+          style={{
+            borderWidth: 1,
+            padding: 10,
+            height: 100,
+            marginBottom: 20,
+            backgroundColor: "white",
+          }}
+        />
+
+        {/* SUBMIT */}
+        <Pressable
+          onPress={handleSubmit}
+          style={{
+            backgroundColor: theme.colors.primary,
+            padding: 15,
+            borderRadius: 8,
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            Aggiungi gioco
+          </Text>
+        </Pressable>
+      </ScrollView>
+    </View>
   );
 }

@@ -162,7 +162,7 @@ router.post("/:id", auth, async (req: any, res) => {
   try {
     const id = req.params.id;
     const game = await GamesSchema.findOne({
-      _id: id,
+      igdbId: id,
     });
 
     if (!game) {

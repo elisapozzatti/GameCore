@@ -32,7 +32,7 @@ router.get("/search/:query", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Errore ricerca giochi",
+      message: "Errore ricerca del gioco",
     });
   }
 });
