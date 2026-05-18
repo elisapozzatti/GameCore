@@ -185,7 +185,7 @@ router.post("/:id", auth, async (req: any, res) => {
     } = req.body;
 
     const addGame = new UserGameSchema({
-      userId: req.user.user.id,
+      userId: req.user.id,
       gameId: game._id,
       status,
       completionPercentage,
@@ -197,6 +197,7 @@ router.post("/:id", auth, async (req: any, res) => {
       notes,
     });
     await addGame.save();
+    return res.status(201).json(addGame);
   } catch (error) {
     console.error("Errore nell'aggiunta del gioco", error);
     res.status(400);
