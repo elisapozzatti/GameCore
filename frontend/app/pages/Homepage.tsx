@@ -143,7 +143,7 @@ export default function Homepage() {
       >
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: "column",
             gap: 10,
             alignItems: "center",
             padding: 10,

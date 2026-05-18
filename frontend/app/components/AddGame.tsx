@@ -12,6 +12,8 @@ import theme from "../theme/theme.js";
 import api from "../api/api";
 
 export default function AddGame() {
+  const [open, setOpen] = useState(true);
+
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [selectedGame, setSelectedGame] = useState<any>(null);
@@ -82,9 +84,10 @@ export default function AddGame() {
     setFavorite(false);
     setRecommend(false);
     setNotes("");
+    setOpen(false);
   }
 
-  return (
+  return open ? (
     <View
       style={{
         height: "90%",
@@ -269,7 +272,7 @@ export default function AddGame() {
           }}
         />
 
-        {/* SUBMIT */}
+        {/*submit*/}
         <Pressable
           onPress={handleSubmit}
           style={{
@@ -285,5 +288,5 @@ export default function AddGame() {
         </Pressable>
       </ScrollView>
     </View>
-  );
+  ) : null;
 }

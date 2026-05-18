@@ -158,6 +158,8 @@ router.get("/hours/:id", auth, async (req, res) => {
 });
 
 //aggiungi un gioco
+//da aggiungere condizione se il gioco è già presente nella lista dell'utente e
+//se si seleziona gioco preferito bisogna mettere false su un altro gioco della lista dell'utente se ne aveva un altro preferito
 router.post("/:id", auth, async (req: any, res) => {
   try {
     const id = Number(req.params.id);
