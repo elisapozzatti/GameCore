@@ -58,12 +58,12 @@ export default function AddGame() {
       igdbId: selectedGame.id,
       name: selectedGame.name,
       status,
-      completion: Number(completion),
-      rating: rating ? Number(rating) : null,
-      inspiration: Number(inspiration),
-      hours: Number(hours),
-      favorite,
-      recommend,
+      completionPercentage: Number(completion),
+      personalRating: rating ? Number(rating) : null,
+      inspirationLevel: Number(inspiration),
+      hoursPlayed: Number(hours),
+      isFavorite: favorite ? Number(favorite) : null,
+      wouldRecommend: recommend ? Number(recommend) : null,
       notes,
     };
 

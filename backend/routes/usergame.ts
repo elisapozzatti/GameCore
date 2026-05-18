@@ -160,7 +160,7 @@ router.get("/hours/:id", auth, async (req, res) => {
 //aggiungi un gioco
 router.post("/:id", auth, async (req: any, res) => {
   try {
-    const id = req.params.id;
+    const id = Number(req.params.id);
     const game = await GamesSchema.findOne({
       igdbId: id,
     });
