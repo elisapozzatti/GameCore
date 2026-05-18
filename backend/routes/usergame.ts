@@ -185,7 +185,7 @@ router.post("/:id", auth, async (req: any, res) => {
     } = req.body;
 
     const addGame = new UserGameSchema({
-      userId: req.user.userId,
+      userId: req.user.user.id,
       gameId: game._id,
       status,
       completionPercentage,

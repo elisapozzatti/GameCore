@@ -38,7 +38,7 @@ async function seed() {
 
     const token = await getAccessToken();
 
-    //utenti
+    /*utenti
     await Users.deleteMany({});
     const hashedPassword = await bcrypt.hash("password123", 10);
     const user1 = await Users.create({
@@ -64,10 +64,10 @@ async function seed() {
       followingCount: 4,
       gamesCompleted: 3,
       totalHoursPlayed: 265,
-    });
+    });*/
 
     //giochi
-    const limit = 100;
+    const limit = 500;
     let offset = 0;
     let hasMore = true;
 
@@ -101,10 +101,10 @@ async function seed() {
         );
       }
       offset += limit;
-      if (offset > 400) break; //sicurezza
+      if (offset > 428000) break; //sicurezza
     }
 
-    //utenti e giochi
+    /*utenti e giochi
     await UserGame.deleteMany({});
     const games = await Games.find().limit(4);
     const gameuser1 = await UserGame.create({
@@ -154,7 +154,7 @@ async function seed() {
       isFavorite: false,
       wouldRecommend: false,
       notes: "Mi annoia",
-    });
+    });*/
 
     console.log("Database popolato");
     process.exit();

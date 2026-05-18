@@ -9,6 +9,7 @@ Inoltre ci sarà una parte dell'applicazione dedicata a vedere come sono messi g
 
 sviluppo:
 -sviluppo applicazione fullstack per gestione dei giochi per ogni utente
+-giochi recuperati da twitch developers
 -sistema di autenticazione
 -CRUD completo sui giochi
 -gestione percentuale di completamento dei giochi
