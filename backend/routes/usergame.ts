@@ -252,7 +252,7 @@ router.post("/:id", auth, async (req: any, res) => {
       });
     }
 
-    const {
+    let {
       userId,
       gameId,
       status,
@@ -271,6 +271,11 @@ router.post("/:id", auth, async (req: any, res) => {
         { userId: req.user.id, isFavorite: true },
         { isFavorite: false },
       );
+    }
+
+    //controllo che se non è suggerito da giocare non risulti null
+    if (wouldRecommend === null) {
+      return (wouldRecommend = false);
     }
 
     const addGame = new UserGameSchema({
