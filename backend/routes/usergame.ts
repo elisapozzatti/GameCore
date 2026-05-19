@@ -10,11 +10,20 @@ const router = express.Router();
 
 router.get("/", auth, async (req, res) => {
   try {
-    const usergame = await UserGameSchema.find();
-    res.json(usergame);
+    const usergame = await UserGameSchema.find()
+      .populate("gameId")
+      .populate("userId");
+
+    const result = usergame.map((item) => ({
+      ...item.toObject(),
+      game: item.gameId,
+      user: item.userId,
+    }));
+
+    res.json(result);
   } catch (error) {
-    console.error("Errore nel recupero dei videogiochi degli utenti", error);
-    res.status(400);
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

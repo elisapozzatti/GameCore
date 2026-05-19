@@ -19,7 +19,7 @@ export default function Footer() {
         height: 80,
       }}
     >
-      <Pressable onPress={() => navigation.navigate("Register" as never)}>
+      <Pressable onPress={() => navigation.navigate("Forum" as never)}>
         <Image
           source={require("../../assets/images/group.webp")}
           style={{ width: 50, height: 50 }}
