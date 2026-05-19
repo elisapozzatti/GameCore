@@ -11,7 +11,7 @@ import {
 import theme from "../theme/theme.js";
 import api from "../api/api";
 
-export default function AddGame() {
+export default function AddGame({ fetchData }: any) {
   const [open, setOpen] = useState(true);
 
   const [query, setQuery] = useState("");
@@ -72,6 +72,8 @@ export default function AddGame() {
     const res = await api.post(`/usergame/${selectedGame.id}`, payload);
 
     console.log("GAME SAVED:", res.data);
+
+    fetchData?.();
 
     //reset
     setQuery("");

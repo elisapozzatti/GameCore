@@ -24,7 +24,7 @@ export async function fetchGames(token: string, limit: number, offset: number) {
             involved_companies.company.name,
             involved_companies.publisher;
         where platforms = (48, 167, 49, 169, 130) & (rating > 70 | first_release_date > ${nowTs} );
-        sort name desc;
+        sort id asc;
         limit ${limit};
         offset ${offset};
         `,

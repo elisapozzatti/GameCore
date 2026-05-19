@@ -18,6 +18,13 @@ export default function Homepage() {
 
   useEffect(() => {
     if (user) {
+      fetchData();
+    }
+  }, [user]);
+
+  const fetchData = async () => {
+    if (!user) return;
+    try {
       api
         .get(`/usergame/complete/${user.id}`)
         .then((res) => {
@@ -48,8 +55,10 @@ export default function Homepage() {
           setAllGames(res.data);
         })
         .catch((err) => console.log(err));
+    } catch (err) {
+      console.log("Errore nel recupero dei dati:", err);
     }
-  }, [user]);
+  };
 
   return (
     <View
@@ -367,7 +376,7 @@ export default function Homepage() {
         </Text>
       </View>
       <Footer />
-      {addGame && <AddGame />}
+      {addGame && <AddGame fetchData={fetchData} />}
     </View>
   );
 }

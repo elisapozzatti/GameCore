@@ -67,7 +67,8 @@ async function seed() {
     });*/
 
     //giochi
-    const limit = 500;
+    await Games.deleteMany({});
+    const limit = 200;
     let offset = 0;
     let hasMore = true;
 
@@ -102,6 +103,8 @@ async function seed() {
       }
       offset += limit;
       if (offset > 428000) break; //sicurezza
+      console.log(`Fetching games offset=${offset}`);
+      console.log(`Ricevuti ${games.length} giochi`);
     }
 
     /*utenti e giochi
