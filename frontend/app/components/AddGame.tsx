@@ -11,7 +11,7 @@ import {
 import theme from "../theme/theme.js";
 import api from "../api/api";
 
-export default function AddGame({ fetchData }: any) {
+export default function AddGame({ fetchData, setAddGame }: any) {
   const [open, setOpen] = useState(true);
 
   const [query, setQuery] = useState("");
@@ -86,7 +86,7 @@ export default function AddGame({ fetchData }: any) {
     setFavorite(false);
     setRecommend(false);
     setNotes("");
-    setOpen(false);
+    setAddGame(false);
   }
 
   return open ? (

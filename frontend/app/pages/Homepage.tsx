@@ -376,7 +376,7 @@ export default function Homepage() {
         </Text>
       </View>
       <Footer />
-      {addGame && <AddGame fetchData={fetchData} />}
+      {addGame && <AddGame fetchData={fetchData} setAddGame={setAddGame} />}
     </View>
   );
 }
