@@ -31,7 +31,7 @@ export default function Forum() {
     >
       {allUsersGames.map((item: any) => (
         <View
-          key={item.id}
+          key={item._id}
           style={{ flexDirection: "column", gap: 10, alignItems: "center" }}
         >
           <Image
@@ -39,7 +39,7 @@ export default function Forum() {
             style={{ width: 200, height: 200 }}
           />
           <Text>{item?.user?.username}</Text>
-          <Text>{item?.game?.genres}</Text>
+          <Text>{item?.game?.genres?.join(", ")}</Text>
         </View>
       ))}
     </View>

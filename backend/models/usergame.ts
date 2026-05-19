@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const UserGameSchema = new mongoose.Schema({
-  userId: mongoose.Schema.Types.ObjectId,
-  gameId: mongoose.Schema.Types.ObjectId,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  gameId: { type: mongoose.Schema.Types.ObjectId, ref: "Game" },
   status: {
     type: String,
     enum: [
