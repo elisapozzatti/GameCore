@@ -7,3 +7,6 @@ COMPONENTI:
 -login: per loggarsi.
 -register: per registrarsi.
 -homepage: pagina che contiene tutti i dati dell'utente come giochi completati, gioco preferito, ore totali giocate... da questa pagina l'utente può aggiungere i giochi.
+-addgame: form per aggiungere un gioco.
+-games: visualizza tutti i giochi o tutti i giochi completati interamente.
+-message: per i messaggi di successo o errore di modifiche o aggiunte giochi.

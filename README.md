@@ -9,16 +9,16 @@ Inoltre ci sarà una parte dell'applicazione dedicata a vedere come sono messi g
 
 sviluppo:
 -sviluppo applicazione fullstack per gestione dei giochi per ogni utente
--giochi recuperati da twitch developers
+-giochi recuperati da twitch developers (db con 42395 giochi)
 -sistema di autenticazione
 -CRUD completo sui giochi
 -gestione percentuale di completamento dei giochi
 -API REST per comunicazione frontend-backend
--deploy dell’applicazione (Vercel, Render, MongoDB Atlas)
+-deploy dell’applicazione (Render, MongoDB Atlas)
 
 come eseguire:
 
-- clona la repoitory
+- clona la repository
 - frontend: npm install e poi npx expo start (se si scannerizza il qrcode e si ha sul telefono l'app "expo go" si può
   visualizzare da telefono)
 - backend: node server.ts
