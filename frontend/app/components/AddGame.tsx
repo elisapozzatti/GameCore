@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import theme from "../theme/theme.js";
 import api from "../api/api";
+import Message from "./Message";
 
 export default function AddGame({ fetchData, setAddGame }: any) {
   const [open, setOpen] = useState(true);
@@ -29,6 +30,9 @@ export default function AddGame({ fetchData, setAddGame }: any) {
   const [recommend, setRecommend] = useState(false);
   const [notes, setNotes] = useState("");
 
+  const [messageOk, setMessageOk] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+
   async function handleSearch(value: string) {
     setQuery(value);
 
@@ -42,7 +46,6 @@ export default function AddGame({ fetchData, setAddGame }: any) {
 
       setResults(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.log("SEARCH ERROR:", err);
       setResults([]);
     }
   }
@@ -56,37 +59,42 @@ export default function AddGame({ fetchData, setAddGame }: any) {
   async function handleSubmit() {
     if (!selectedGame) return;
 
-    const payload = {
-      igdbId: selectedGame.id,
-      name: selectedGame.name,
-      status,
-      completionPercentage: Number(completion),
-      personalRating: rating ? Number(rating) : null,
-      inspirationLevel: Number(inspiration),
-      hoursPlayed: Number(hours),
-      isFavorite: favorite ? Number(favorite) : null,
-      wouldRecommend: recommend ? Number(recommend) : null,
-      notes,
-    };
+    try {
+      const payload = {
+        igdbId: selectedGame.id,
+        name: selectedGame.name,
+        status,
+        completionPercentage: Number(completion),
+        personalRating: rating ? Number(rating) : null,
+        inspirationLevel: Number(inspiration),
+        hoursPlayed: Number(hours),
+        isFavorite: favorite ? Number(favorite) : null,
+        wouldRecommend: recommend ? Number(recommend) : null,
+        notes,
+      };
 
-    const res = await api.post(`/usergame/${selectedGame.id}`, payload);
+      const res = await api.post(`/usergame/${selectedGame.id}`, payload);
 
-    console.log("GAME SAVED:", res.data);
+      fetchData?.();
 
-    fetchData?.();
-
-    //reset
-    setQuery("");
-    setSelectedGame(null);
-    setResults([]);
-    setCompletion("");
-    setRating("");
-    setInspiration("");
-    setHours("");
-    setFavorite(false);
-    setRecommend(false);
-    setNotes("");
-    setAddGame(false);
+      //reset
+      setQuery("");
+      setSelectedGame(null);
+      setResults([]);
+      setCompletion("");
+      setRating("");
+      setInspiration("");
+      setHours("");
+      setFavorite(false);
+      setRecommend(false);
+      setNotes("");
+      setMessageOk(true);
+      setTimeout(() => {
+        setAddGame(false);
+      }, 1000);
+    } catch (err) {
+      setMessageError(true);
+    }
   }
 
   return open ? (
@@ -100,7 +108,21 @@ export default function AddGame({ fetchData, setAddGame }: any) {
         backgroundColor: theme.colors.secondary,
       }}
     >
-      {/* AUTOCOMPLETE DROPDOWN */}
+      <Pressable onPress={() => setAddGame(false)}>
+        <Text
+          style={{
+            color: theme.colors.text,
+            fontSize: 20,
+            fontWeight: "bold",
+            marginLeft: "auto",
+            marginRight: 10,
+            height: "auto",
+          }}
+        >
+          X
+        </Text>
+      </Pressable>
+      {/*suggerimenti titoli dei giochi*/}
       {results.length > 0 && (
         <View
           style={{
@@ -134,8 +156,11 @@ export default function AddGame({ fetchData, setAddGame }: any) {
       )}
 
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
-          padding: 20,
+          paddingRight: 20,
+          paddingLeft: 20,
+          paddingBottom: 20,
           backgroundColor: theme.colors.secondary,
         }}
       >
@@ -289,6 +314,24 @@ export default function AddGame({ fetchData, setAddGame }: any) {
           </Text>
         </Pressable>
       </ScrollView>
+      {messageOk && (
+        <View style={{ position: "absolute", top: 20, left: 20, right: 20 }}>
+          <Message
+            message="Gioco aggiunto con successo!"
+            type="success"
+            setMessage={() => setMessageOk(false)}
+          />
+        </View>
+      )}
+      {messageError && (
+        <View style={{ position: "absolute", top: 20, left: 20, right: 20 }}>
+          <Message
+            message="Errore durante l'aggiunta del gioco. Gioco non presente per console."
+            type="error"
+            setMessage={() => setMessageError(false)}
+          />
+        </View>
+      )}
     </View>
   ) : null;
 }

@@ -4,6 +4,7 @@ import auth from "../middleware/auth.ts";
 import UserGameSchema from "../models/usergame.ts";
 import GamesSchema from "../models/games.ts";
 import UsersSchema from "../models/users.ts";
+import UserGame from "../models/usergame.ts";
 
 const router = express.Router();
 
@@ -158,8 +159,6 @@ router.get("/hours/:id", auth, async (req, res) => {
 });
 
 //aggiungi un gioco
-//da aggiungere condizione se il gioco è già presente nella lista dell'utente e
-//se si seleziona gioco preferito bisogna mettere false su un altro gioco della lista dell'utente se ne aveva un altro preferito
 router.post("/:id", auth, async (req: any, res) => {
   try {
     const id = Number(req.params.id);
@@ -170,6 +169,18 @@ router.post("/:id", auth, async (req: any, res) => {
     if (!game) {
       return res.status(404).json({
         error: "Gioco non trovato",
+      });
+    }
+
+    //controllo se il gioco è già stato aggiunto dall'utente
+    const alreadyExists = await UserGame.findOne({
+      userId: req.user.id,
+      igdbId: game.id,
+    });
+
+    if (alreadyExists) {
+      return res.status(400).json({
+        message: "Gioco già aggiunto",
       });
     }
 
@@ -185,6 +196,14 @@ router.post("/:id", auth, async (req: any, res) => {
       wouldRecommend,
       notes,
     } = req.body;
+
+    //controllo se il gioco è segnato come preferito, in tal caso tolgo la preferenza a tutti gli altri giochi dell'utente
+    if (isFavorite) {
+      await UserGame.updateMany(
+        { userId: req.user.id, isFavorite: true },
+        { isFavorite: false },
+      );
+    }
 
     const addGame = new UserGameSchema({
       userId: req.user.id,
@@ -205,16 +224,5 @@ router.post("/:id", auth, async (req: any, res) => {
     res.status(400);
   }
 });
-
-/*const alreadyExists = await UserGame.findOne({
-  userId,
-  igdbId: game.id,
-});
-
-if (alreadyExists) {
-  return res.status(400).json({
-    message: "Gioco già aggiunto",
-  });
-}*/
 
 export default router;

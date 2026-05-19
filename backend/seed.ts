@@ -67,7 +67,7 @@ async function seed() {
     });*/
 
     //giochi
-    await Games.deleteMany({});
+    //await Games.deleteMany({});
     const limit = 200;
     let offset = 0;
     let hasMore = true;

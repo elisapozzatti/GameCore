@@ -137,6 +137,7 @@ export default function Homepage() {
       </View>
       {/*seconda riga con i giochi in corso*/}
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
           backgroundColor: theme.colors.card,
           width: "95%",
@@ -268,9 +269,11 @@ export default function Homepage() {
           >
             {prefer?.game?.title}
           </Text>
-          <Text style={{ color: theme.colors.text }}>
-            {prefer?._doc?.hoursPlayed}h giocate
-          </Text>
+          {prefer?._doc?.hoursPlayed != null && (
+            <Text style={{ color: theme.colors.text }}>
+              {prefer?._doc?.hoursPlayed}h giocate
+            </Text>
+          )}
         </View>
       </View>
       {/*4 riga con ore giocate e tutti i giochi*/}
