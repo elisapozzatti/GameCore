@@ -158,9 +158,11 @@ router.get("/top3/complete/:id", auth, async (req, res) => {
     const userId = req.params.id;
     const usergame = await UserGameSchema.find({
       userId: new mongoose.Types.ObjectId(userId),
-    }).limit(3);
+    });
 
-    const complete = usergame.filter((item) => item.status === "completed");
+    const complete = usergame
+      .filter((item) => item.status === "completed")
+      .slice(0, 3);
 
     const result = await Promise.all(
       complete.map(async (item) => {

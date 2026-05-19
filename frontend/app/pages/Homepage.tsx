@@ -108,8 +108,9 @@ export default function Homepage() {
           </Text>
           <Pressable
             onPress={() => {
-              navigation.navigate("Games", "Allgames");
+              navigation.navigate("Games", { screen: "Allgames" });
             }}
+            style={{ marginLeft: "auto" }}
           >
             <Text
               style={{
@@ -118,7 +119,6 @@ export default function Homepage() {
                 padding: 5,
                 borderRadius: 5,
                 fontFamily: theme.fontFamily.ox,
-                marginLeft: "auto",
               }}
             >
               Vedi tutti
@@ -350,7 +350,10 @@ export default function Homepage() {
               COMPLETATI
             </Text>
             <Pressable
-              onPress={() => navigation.navigate("Games", "Completedgames")}
+              onPress={() =>
+                navigation.navigate("Games", { screen: "Completedgames" })
+              }
+              style={{ marginLeft: "auto" }}
             >
               <Text
                 style={{
@@ -359,9 +362,7 @@ export default function Homepage() {
                   padding: 5,
                   borderRadius: 5,
                   fontFamily: theme.fontFamily.ox,
-                  position: "absolute",
-                  right: 1,
-                  top: 1,
+                  marginTop: 5,
                 }}
               >
                 Vedi tutti

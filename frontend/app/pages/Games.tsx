@@ -9,7 +9,7 @@ export default function Games({ route }: any) {
   const [sessionCompleted, setSessionCompleted] = useState([]);
   const [AllGames, setAllGames] = useState([]);
 
-  const screen = route.params;
+  const screen = route.params?.screen;
 
   useEffect(() => {
     if (user) {
