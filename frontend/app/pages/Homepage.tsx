@@ -6,9 +6,13 @@ import api from "../api/api";
 import { useAuth } from "../../context/AuthContext";
 import Footer from "../components/Footer";
 import AddGame from "../components/AddGame";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Homepage() {
   const { user, logout } = useAuth();
+
+  const navigation = useNavigation<any>();
+
   const [sessionCompleted, setSessionCompleted] = useState<any>([]);
   const [sessionActive, setSessionActive] = useState<any>([]);
   const [prefer, setPrefer] = useState<any>({});
@@ -26,7 +30,7 @@ export default function Homepage() {
     if (!user) return;
     try {
       api
-        .get(`/usergame/complete/${user.id}`)
+        .get(`/usergame/top3/complete/${user.id}`)
         .then((res) => {
           setSessionCompleted(res.data);
         })
@@ -50,7 +54,7 @@ export default function Homepage() {
         })
         .catch((err) => console.log(err));
       api
-        .get(`/usergame/${user.id}`)
+        .get(`/usergame/top6/${user.id}`)
         .then((res) => {
           setAllGames(res.data);
         })
@@ -69,7 +73,7 @@ export default function Homepage() {
       }}
     >
       <Header />
-      {/*prima riga con giochi completati*/}
+      {/*prima riga con tutti i giochi*/}
       <View
         style={{
           backgroundColor: theme.colors.card,
@@ -91,42 +95,38 @@ export default function Homepage() {
             width: "95%",
           }}
         >
-          <View
-            style={{
-              backgroundColor: theme.colors.secondary,
-              padding: 5,
-              borderRadius: 5,
-              alignItems: "center",
-            }}
-          >
-            <Image
-              source={require("../../assets/images/checklist.webp")}
-              style={{ width: 15, height: 15 }}
-            />
-          </View>
           <Text
             style={{
               color: theme.colors.text,
               fontFamily: theme.fontFamily.ox,
+              borderLeftColor: theme.colors.secondary,
+              borderLeftWidth: 2,
+              paddingLeft: 3,
             }}
           >
-            GIOCHI COMPLETATI
+            TUTTI I GIOCHI
           </Text>
-          <Text
-            style={{
-              backgroundColor: theme.colors.secondary,
-              color: theme.colors.text,
-              padding: 5,
-              borderRadius: 5,
-              fontFamily: theme.fontFamily.ox,
-              marginLeft: "auto",
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Games", "Allgames");
             }}
           >
-            + altri 3
-          </Text>
+            <Text
+              style={{
+                backgroundColor: theme.colors.secondary,
+                color: theme.colors.text,
+                padding: 5,
+                borderRadius: 5,
+                fontFamily: theme.fontFamily.ox,
+                marginLeft: "auto",
+              }}
+            >
+              Vedi tutti
+            </Text>
+          </Pressable>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
-          {sessionCompleted.map((item: any, index: any) => (
+          {allGames.map((item: any, index: any) => (
             <Image
               key={index}
               source={{ uri: item?.game?.coverImage }}
@@ -276,13 +276,12 @@ export default function Homepage() {
           )}
         </View>
       </View>
-      {/*4 riga con ore giocate e tutti i giochi*/}
+      {/*4 riga con ore giocate e i giochi completati*/}
       <View
         style={{
           flexDirection: "row",
           gap: 10,
           width: "95%",
-          padding: 10,
           boxSizing: "border-box",
           margin: 0,
           height: 100,
@@ -293,7 +292,7 @@ export default function Homepage() {
             justifyContent: "center",
             alignItems: "center",
             backgroundColor: theme.colors.card,
-            width: "50%",
+            width: "35%",
             height: 100,
             borderRadius: 10,
           }}
@@ -321,35 +320,67 @@ export default function Homepage() {
         <View
           style={{
             backgroundColor: theme.colors.card,
-            width: "50%",
+            width: "62.5%",
             height: 100,
             borderRadius: 10,
             justifyContent: "center",
             alignItems: "center",
-            gap: 10,
-            flexDirection: "row",
+            gap: 5,
+            flexDirection: "column",
           }}
         >
-          {allGames.map((item: any, index: any) => (
-            <Image
-              source={{ uri: item?.game?.coverImage }}
-              style={{ width: 50, height: 50, marginTop: 20 }}
-            />
-          ))}
-          <Text
+          <View
             style={{
-              backgroundColor: theme.colors.secondary,
-              color: theme.colors.text,
-              padding: 5,
-              borderRadius: 5,
-              fontFamily: theme.fontFamily.ox,
-              position: "absolute",
-              right: 5,
-              top: 5,
+              flexDirection: "row",
+              gap: 10,
+              alignItems: "center",
+              width: "95%",
             }}
           >
-            Vedi tutti
-          </Text>
+            <Text
+              style={{
+                color: theme.colors.text,
+                fontFamily: theme.fontFamily.ox,
+                borderLeftColor: theme.colors.secondary,
+                borderLeftWidth: 2,
+                paddingLeft: 3,
+                marginTop: 5,
+              }}
+            >
+              COMPLETATI
+            </Text>
+            <Pressable
+              onPress={() => navigation.navigate("Games", "Completedgames")}
+            >
+              <Text
+                style={{
+                  backgroundColor: theme.colors.secondary,
+                  color: theme.colors.text,
+                  padding: 5,
+                  borderRadius: 5,
+                  fontFamily: theme.fontFamily.ox,
+                  position: "absolute",
+                  right: 1,
+                  top: 1,
+                }}
+              >
+                Vedi tutti
+              </Text>
+            </Pressable>
+          </View>
+          <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+            {sessionCompleted.map((item: any, index: any) => (
+              <Image
+                source={{ uri: item?.game?.coverImage }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginTop: 10,
+                  marginBottom: 10,
+                }}
+              />
+            ))}
+          </View>
         </View>
       </View>
       {/*quinta riga con bottone per aggiungere gioco*/}
@@ -372,6 +403,7 @@ export default function Homepage() {
             borderRadius: 5,
             aspectRatio: 1,
             textAlign: "center",
+            width: 50,
           }}
           onPress={() => setAddGame(true)}
         >

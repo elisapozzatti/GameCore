@@ -100,12 +100,13 @@ export default function AddGame({ fetchData, setAddGame }: any) {
   return open ? (
     <View
       style={{
-        height: "90%",
+        height: "80%",
         position: "absolute",
         top: "10%",
         left: "5%",
         right: "5%",
         backgroundColor: theme.colors.secondary,
+        borderRadius: 10,
       }}
     >
       <Pressable onPress={() => setAddGame(false)}>
@@ -115,6 +116,7 @@ export default function AddGame({ fetchData, setAddGame }: any) {
             fontSize: 20,
             fontWeight: "bold",
             marginLeft: "auto",
+            marginTop: 10,
             marginRight: 10,
             height: "auto",
           }}
@@ -162,13 +164,14 @@ export default function AddGame({ fetchData, setAddGame }: any) {
           paddingLeft: 20,
           paddingBottom: 20,
           backgroundColor: theme.colors.secondary,
+          borderRadius: 10,
         }}
       >
         <Text style={{ marginBottom: 8 }}>
           Aggiungi un gioco alla tua collezione
         </Text>
 
-        {/* SEARCH */}
+        {/*input di ricerca gioco*/}
         <TextInput
           placeholder="Cerca un gioco..."
           value={query}
@@ -182,8 +185,8 @@ export default function AddGame({ fetchData, setAddGame }: any) {
           }}
         />
 
-        {/* STATUS DROPDOWN */}
-        <Text style={{ marginTop: 20 }}>Stato del gioco</Text>
+        {/*stato del gioco*/}
+        <Text>Stato del gioco</Text>
 
         <Pressable
           onPress={() => setStatusOpen(!statusOpen)}
@@ -191,7 +194,6 @@ export default function AddGame({ fetchData, setAddGame }: any) {
             padding: 10,
             borderWidth: 1,
             borderRadius: 6,
-            marginTop: 10,
             backgroundColor: "white",
           }}
         >
@@ -202,7 +204,6 @@ export default function AddGame({ fetchData, setAddGame }: any) {
           <View
             style={{
               borderWidth: 1,
-              borderColor: "#ddd",
               borderRadius: 6,
               backgroundColor: "white",
               marginTop: 5,
@@ -240,41 +241,61 @@ export default function AddGame({ fetchData, setAddGame }: any) {
           </View>
         )}
 
-        {/* INPUTS */}
-        <Text style={{ marginTop: 20 }}>Percentuale completamento</Text>
+        {/*altri campi*/}
+        <Text style={{ marginTop: 10 }}>Percentuale completamento</Text>
         <TextInput
           keyboardType="numeric"
           value={completion}
           onChangeText={setCompletion}
-          style={{ borderWidth: 1, padding: 8 }}
+          style={{
+            borderWidth: 1,
+            padding: 8,
+            borderRadius: 6,
+            backgroundColor: "white",
+          }}
         />
 
-        <Text style={{ marginTop: 20 }}>Valutazione (0-10)</Text>
+        <Text style={{ marginTop: 10 }}>Valutazione (0-10)</Text>
         <TextInput
           keyboardType="numeric"
           value={rating}
           onChangeText={setRating}
-          style={{ borderWidth: 1, padding: 8 }}
+          style={{
+            borderWidth: 1,
+            padding: 8,
+            borderRadius: 6,
+            backgroundColor: "white",
+          }}
         />
 
-        <Text style={{ marginTop: 20 }}>Ispirazione (0-10)</Text>
+        <Text style={{ marginTop: 10 }}>Ispirazione (0-10)</Text>
         <TextInput
           keyboardType="numeric"
           value={inspiration}
           onChangeText={setInspiration}
-          style={{ borderWidth: 1, padding: 8 }}
+          style={{
+            borderWidth: 1,
+            padding: 8,
+            borderRadius: 6,
+            backgroundColor: "white",
+          }}
         />
 
-        <Text style={{ marginTop: 20 }}>Ore giocate</Text>
+        <Text style={{ marginTop: 10 }}>Ore giocate</Text>
         <TextInput
           keyboardType="numeric"
           value={hours}
           onChangeText={setHours}
-          style={{ borderWidth: 1, padding: 8 }}
+          style={{
+            borderWidth: 1,
+            padding: 8,
+            borderRadius: 6,
+            backgroundColor: "white",
+          }}
         />
 
-        {/* SWITCHES */}
-        <View style={{ marginTop: 20 }}>
+        {/*boolean*/}
+        <View style={{ marginTop: 10 }}>
           <Text>Gioco preferito?</Text>
           <Switch value={favorite} onValueChange={setFavorite} />
         </View>
@@ -284,8 +305,8 @@ export default function AddGame({ fetchData, setAddGame }: any) {
           <Switch value={recommend} onValueChange={setRecommend} />
         </View>
 
-        {/* NOTES */}
-        <Text style={{ marginTop: 20 }}>Note personali</Text>
+        {/*note*/}
+        <Text style={{ marginTop: 10 }}>Note personali</Text>
         <TextInput
           multiline
           value={notes}
@@ -295,6 +316,7 @@ export default function AddGame({ fetchData, setAddGame }: any) {
             padding: 10,
             height: 100,
             marginBottom: 20,
+            borderRadius: 6,
             backgroundColor: "white",
           }}
         />
@@ -307,6 +329,7 @@ export default function AddGame({ fetchData, setAddGame }: any) {
             padding: 15,
             borderRadius: 8,
             alignItems: "center",
+            marginBottom: 10,
           }}
         >
           <Text style={{ color: "white", fontWeight: "bold" }}>

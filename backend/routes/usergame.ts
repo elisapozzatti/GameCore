@@ -44,6 +44,32 @@ router.get("/:id", auth, async (req, res) => {
   }
 });
 
+//primi 6 videogiochi di un utente
+router.get("/top6/:id", auth, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const usergame = await UserGameSchema.find({
+      userId: new mongoose.Types.ObjectId(userId),
+    }).limit(6);
+
+    const result = await Promise.all(
+      usergame.map(async (item) => {
+        const games = await GamesSchema.findById(item.gameId).lean();
+
+        return {
+          ...item.toObject(),
+          game: games,
+        };
+      }),
+    );
+
+    res.json(result);
+  } catch (error) {
+    console.error("Errore nel recupero dei videogiochi dell'utente", error);
+    res.status(400);
+  }
+});
+
 //videogioco preferito di un utente
 router.get("/prefer/:id", auth, async (req, res) => {
   try {
@@ -102,6 +128,37 @@ router.get("/complete/:id", auth, async (req, res) => {
     const usergame = await UserGameSchema.find({
       userId: new mongoose.Types.ObjectId(userId),
     });
+
+    const complete = usergame.filter((item) => item.status === "completed");
+
+    const result = await Promise.all(
+      complete.map(async (item) => {
+        const game = await GamesSchema.findById(item.gameId).lean();
+
+        return {
+          ...item.toObject(),
+          game,
+        };
+      }),
+    );
+
+    res.json(result);
+  } catch (error) {
+    console.error(
+      "Errore nel recupero dei videogiochi completati dell'utente",
+      error,
+    );
+    res.status(400);
+  }
+});
+
+//primi 3 videogiochi completati di un utente
+router.get("/top3/complete/:id", auth, async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const usergame = await UserGameSchema.find({
+      userId: new mongoose.Types.ObjectId(userId),
+    }).limit(3);
 
     const complete = usergame.filter((item) => item.status === "completed");
 

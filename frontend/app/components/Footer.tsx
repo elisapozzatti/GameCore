@@ -16,7 +16,7 @@ export default function Footer() {
         alignItems: "center",
         justifyContent: "center",
         gap: 50,
-        height: 60,
+        height: 80,
       }}
     >
       <Pressable onPress={() => navigation.navigate("Register" as never)}>
