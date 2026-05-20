@@ -1,4 +1,4 @@
-import { Text, Image, ScrollView, View } from "react-native";
+import { Text, Image, FlatList, View, Dimensions } from "react-native";
 import theme from "../theme/theme.js";
 import { useEffect, useState } from "react";
 import api from "../api/api";
@@ -7,7 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 export default function Forum() {
   const { user, logout } = useAuth();
 
-  const [allUsersGames, setAllUsersGames] = useState([]);
+  const { width, height } = Dimensions.get("window");
+
+  const [allUsersGames, setAllUsersGames] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -21,125 +23,125 @@ export default function Forum() {
   }, [user]);
 
   return (
-    <ScrollView
+    <View
       style={{
-        flexDirection: "column",
-        gap: 10,
-        width: "100%",
-        padding: 10,
-      }}
-      contentContainerStyle={{
-        alignItems: "center",
-        justifyContent: "center",
-        flexWrap: "wrap",
+        backgroundColor: theme.colors.text,
       }}
     >
-      {allUsersGames.map((item: any) => (
-        <View
-          style={{
-            marginBottom: 10,
-            backgroundColor: theme.colors.primary,
-            padding: 10,
-            flexDirection: "row",
-            gap: 10,
-            borderRadius: 10,
-            width: "95%",
-          }}
-        >
+      <FlatList
+        data={allUsersGames}
+        pagingEnabled
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
           <View
-            key={item._id}
             style={{
-              flexDirection: "column",
-              gap: 5,
+              justifyContent: "center",
+              alignItems: "center",
+              width,
+              height: height - 150,
             }}
           >
-            <Image
-              source={{ uri: item?.game?.coverImage }}
-              style={{ width: 150, height: 150 }}
-            />
-            <Text
+            <View
               style={{
-                color: theme.colors.text,
-                fontWeight: "bold",
-                textAlign: "center",
+                backgroundColor: theme.colors.primary,
+                borderRadius: 20,
+                width,
+                height: height - 150,
+                overflow: "hidden",
               }}
             >
-              {item?.user?.username}
-            </Text>
+              <Image
+                source={{ uri: item?.game?.coverImage }}
+                style={{
+                  width: "100%",
+                  height: 300,
+                }}
+              />
+
+              <View
+                style={{
+                  padding: 20,
+                }}
+              >
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    fontSize: 28,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {item?.game?.title}
+                </Text>
+
+                <Text
+                  style={{
+                    color: theme.colors.secondary,
+                    marginTop: 10,
+                    fontSize: 20,
+                  }}
+                >
+                  ⭐ {item?.game?.rating?.toFixed(2)}/100
+                </Text>
+
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    marginTop: 10,
+                  }}
+                >
+                  🎮 {item?.hoursPlayed}h giocate
+                </Text>
+
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    marginTop: 10,
+                  }}
+                >
+                  {item?.game?.genres?.join(" • ")}
+                </Text>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginTop: 20,
+                    gap: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: theme.colors.text,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item?.user?.username}
+                  </Text>
+                  <Text
+                    style={{
+                      color: theme.colors.text,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    "{item?.notes}"
+                  </Text>
+                </View>
+
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    marginTop: 20,
+                    lineHeight: 22,
+                  }}
+                >
+                  {item?.game?.summary}
+                </Text>
+              </View>
+            </View>
           </View>
-          <View style={{ flexDirection: "column", gap: 5, width: "100%" }}>
-            <Text
-              style={{
-                color: theme.colors.text,
-                backgroundColor: theme.colors.card,
-                width: "9%",
-                padding: 5,
-                borderRadius: 5,
-              }}
-            >
-              Completato: {item?.completionPercentage}%
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text,
-                padding: 5,
-              }}
-            >
-              Ore giocate: {item?.hoursPlayed}h
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text,
-                backgroundColor: theme.colors.card,
-                width: "auto",
-                maxWidth: "88%",
-                padding: 5,
-                borderRadius: 5,
-              }}
-            >
-              Generi: {item?.game?.genres?.join(", ")}
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text,
-                padding: 5,
-              }}
-            >
-              {item?.game?.wouldRecommend ? "Non Consigliato" : "Consigliato"}
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text,
-                backgroundColor: theme.colors.card,
-                width: "5.5%",
-                padding: 5,
-                borderRadius: 5,
-              }}
-            >
-              {item?.game?.rating?.toFixed(2)}/100
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text,
-                padding: 5,
-              }}
-            >
-              Note: {item?.notes}
-            </Text>
-            <Text
-              style={{
-                color: theme.colors.text,
-                backgroundColor: theme.colors.card,
-                padding: 5,
-                width: "88%",
-                borderRadius: 5,
-              }}
-            >
-              {item?.game?.summary}
-            </Text>
-          </View>
-        </View>
-      ))}
-    </ScrollView>
+        )}
+      />
+    </View>
   );
 }

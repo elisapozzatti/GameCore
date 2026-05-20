@@ -8,9 +8,10 @@ import UserGame from "../models/usergame.ts";
 
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, async (req: any, res: any) => {
   try {
-    const usergame = await UserGameSchema.find()
+    const userId = req.user.id;
+    const usergame = await UserGameSchema.find({ userId: { $ne: userId } })
       .populate("gameId")
       .populate("userId");
 
