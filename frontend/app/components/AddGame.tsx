@@ -349,7 +349,7 @@ export default function AddGame({ fetchData, setAddGame }: any) {
       {messageError && (
         <View style={{ position: "absolute", top: 20, left: 20, right: 20 }}>
           <Message
-            message="Errore durante l'aggiunta del gioco. Gioco non presente per console."
+            message="Errore durante l'aggiunta del gioco."
             type="error"
             setMessage={() => setMessageError(false)}
           />

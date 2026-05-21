@@ -4,11 +4,9 @@ import Home from "../pages/Homepage";
 import Register from "../pages/Register";
 import Games from "../pages/Games";
 import Forum from "../pages/Forum";
-import Singlegame from "../pages/Singlegame/[id]";
+import Singlegame from "../pages/Singlegame";
 import { AuthProvider } from "../../context/AuthContext";
-
 const Stack = createNativeStackNavigator();
-const GamesStack = createNativeStackNavigator();
 
 export default function Navigation() {
   return (

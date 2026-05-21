@@ -1,11 +1,20 @@
-import { Text, Image, FlatList, View, Dimensions } from "react-native";
+import {
+  Text,
+  Image,
+  FlatList,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import theme from "../theme/theme.js";
 import { useEffect, useState } from "react";
 import api from "../api/api";
 import { useAuth } from "@/context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Forum() {
   const { user, logout } = useAuth();
+  const navigation = useNavigation<any>();
 
   const { width, height } = Dimensions.get("window");
 
@@ -49,31 +58,47 @@ export default function Forum() {
                 width,
                 height: height - 150,
                 overflow: "hidden",
+                alignItems: "center",
               }}
             >
-              <Image
-                source={{ uri: item?.game?.coverImage }}
-                style={{
-                  width: "100%",
-                  height: 300,
-                }}
-              />
-
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Singlegame", {
+                    id: item?.game?._id,
+                  })
+                }
+              >
+                <Image
+                  source={{ uri: item?.game?.coverImage }}
+                  style={{
+                    width: "100%",
+                    height: 300,
+                    marginTop: 10,
+                  }}
+                />
+              </TouchableOpacity>
               <View
                 style={{
                   padding: 20,
                 }}
               >
-                <Text
-                  style={{
-                    color: theme.colors.text,
-                    fontSize: 28,
-                    fontWeight: "bold",
-                  }}
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Singlegame", {
+                      id: item?.game?._id,
+                    })
+                  }
                 >
-                  {item?.game?.title}
-                </Text>
-
+                  <Text
+                    style={{
+                      color: theme.colors.text,
+                      fontSize: 28,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {item?.game?.title}
+                  </Text>
+                </TouchableOpacity>
                 <Text
                   style={{
                     color: theme.colors.secondary,
