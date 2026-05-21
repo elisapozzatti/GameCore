@@ -1,5 +1,13 @@
-import { Text, View, Image, ScrollView, Pressable } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  ScrollView,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
+import { router } from "expo-router";
 import theme from "../theme/theme";
 import Header from "../components/Header";
 import api from "../api/api";
@@ -127,11 +135,20 @@ export default function Homepage() {
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           {allGames.map((item: any, index: any) => (
-            <Image
-              key={index}
-              source={{ uri: item?.game?.coverImage }}
-              style={{ width: 50, height: 50 }}
-            />
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/pages/Singlegame/[id]",
+                  params: { id: item?.game?._id },
+                })
+              }
+            >
+              <Image
+                key={index}
+                source={{ uri: item?.game?.coverImage }}
+                style={{ width: 50, height: 50 }}
+              />
+            </TouchableOpacity>
           ))}
         </View>
       </View>

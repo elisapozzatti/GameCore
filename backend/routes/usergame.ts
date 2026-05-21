@@ -28,6 +28,37 @@ router.get("/", auth, async (req: any, res: any) => {
   }
 });
 
+//videogioco di un utente
+router.get("/single/:id", auth, async (req: any, res) => {
+  try {
+    const userId = req.user.id;
+    const gameId = req.params.id;
+
+    const usergame = await UserGameSchema.findOne({
+      userId: new mongoose.Types.ObjectId(userId),
+      gameId: new mongoose.Types.ObjectId(gameId),
+    });
+
+    if (!usergame) {
+      return res
+        .status(404)
+        .json({ error: "Gioco non trovato per questo utente" });
+    }
+
+    const games = await GamesSchema.findById(usergame.gameId).lean();
+
+    const result = {
+      ...usergame.toObject(),
+      game: games,
+    };
+
+    res.json(result);
+  } catch (error) {
+    console.error("Errore nel recupero dei videogiochi dell'utente", error);
+    res.status(400);
+  }
+});
+
 //videogiochi di un utente
 router.get("/:id", auth, async (req, res) => {
   try {

@@ -23,7 +23,6 @@ export async function fetchGames(token: string, limit: number, offset: number) {
             first_release_date,
             involved_companies.company.name,
             involved_companies.publisher;
-        where platforms = (48, 167, 49, 169, 130);
         sort id asc;
         limit ${limit};
         offset ${offset};
