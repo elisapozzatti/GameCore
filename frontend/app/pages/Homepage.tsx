@@ -258,7 +258,7 @@ export default function Homepage() {
         }
         style={{
           width: "100%",
-          marginLeft: 50,
+          marginLeft: 25,
         }}
       >
         <View

@@ -1,4 +1,3 @@
-Ancora in sviluppo.
 Applicazione sviluppata con react native, express e mongodb.
 
 breve spiegazione:
@@ -16,9 +15,13 @@ sviluppo:
 -API REST per comunicazione frontend-backend
 -deploy dell’applicazione (Render, MongoDB Atlas)
 
-come eseguire:
+possibili sviluppi futuri:
+-completamento pagina del singolo gioco, con miglioramenti parte grafica e possibilità di cancellare il gioco.
+-miglioramento grafica e stile di scorrimento nella pagina della lista dei giochi di tutti gli utenti.
+-possibile filtro in base ai gusti dell'utente nella pagina della lista dei giochi di tutti gli utenti.
+-creazione della pagina del profilo utente per modifiche, eliminazione e logout.
 
-- clona la repository
-- frontend: npm install e poi npx expo start (se si scannerizza il qrcode e si ha sul telefono l'app "expo go" si può
-  visualizzare da telefono)
-- backend: node server.ts
+come eseguire:
+-clona la repository
+-frontend: npm install e poi npx expo start (se si scannerizza il qrcode e si ha sul telefono l'app "expo go" si può visualizzare da telefono)
+-backend: node server.ts

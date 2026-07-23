@@ -16,7 +16,7 @@ export default function Forum() {
   const { user, logout } = useAuth();
   const navigation = useNavigation<any>();
 
-  const { width, height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
 
   const [allUsersGames, setAllUsersGames] = useState<any[]>([]);
 
@@ -35,11 +35,11 @@ export default function Forum() {
     <View
       style={{
         backgroundColor: theme.colors.text,
+        flex: 1,
       }}
     >
       <FlatList
         data={allUsersGames}
-        pagingEnabled
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
@@ -47,16 +47,13 @@ export default function Forum() {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              width,
-              height: height - 150,
+              margin: 10,
             }}
           >
             <View
               style={{
                 backgroundColor: theme.colors.primary,
                 borderRadius: 20,
-                width,
-                height: height - 150,
                 overflow: "hidden",
                 alignItems: "center",
               }}
@@ -71,7 +68,7 @@ export default function Forum() {
                 <Image
                   source={{ uri: item?.game?.coverImage }}
                   style={{
-                    width: "100%",
+                    width: 250,
                     height: 300,
                     marginTop: 10,
                   }}

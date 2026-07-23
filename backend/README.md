@@ -14,4 +14,4 @@ routes:
 
 middleware:
 
-- auth: per prendere il token togliere le parti non necessarie e salvarlo.
+- auth: per prendere il token e togliere le parti non necessarie e salvarlo.

@@ -11,15 +11,22 @@ const router = express.Router();
 router.get("/", auth, async (req: any, res: any) => {
   try {
     const userId = req.user.id;
-    const usergame = await UserGameSchema.find({ userId: { $ne: userId } })
-      .populate("gameId")
-      .populate("userId");
 
-    const result = usergame.map((item) => ({
-      ...item.toObject(),
-      game: item.gameId,
-      user: item.userId,
-    }));
+    const usergame = await UserGameSchema.find({
+      userId: { $ne: userId },
+    }).populate("userId");
+
+    const result = await Promise.all(
+      usergame.map(async (item) => {
+        const game = await GamesSchema.findById(item.gameId).lean();
+
+        return {
+          ...item.toObject(),
+          game,
+          user: item.userId,
+        };
+      }),
+    );
 
     res.json(result);
   } catch (error) {
